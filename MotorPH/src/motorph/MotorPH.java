@@ -32,11 +32,13 @@ public class MotorPH {
        
         String option ="";
         while (true){
+        //Display employee options
         if (username.equals("employee")){
             System.out.println("\nChoose an option");
             System.out.println("1. Enter your employee number");
             System.out.println("2. Exit the program");   
             System.out.print("Enter number: ");}
+        //Display payroll staff options
         else if(username.equals("payroll_staff")){
             System.out.println("\nChoose an option");
             System.out.println("1. Process Payroll");
@@ -48,7 +50,7 @@ public class MotorPH {
         else{System.out.println("Invalid option");}
         }
         
-        //Employee: Display Employee Details
+        //Employee: Call Display Employee Details method
         if (username.equals("employee")&&option.equals("1")){
             displayEmpDetails(scanner);}
         
@@ -70,24 +72,25 @@ public class MotorPH {
         } 
         }
         
-        //Payroll Staff: Process payroll for one employee
+        //Payroll Staff: Call Process payroll method for one employee
         if(option2.equals("1")){processPayroll(scanner, true);}
+        //Payroll Staff: Call Process payroll method for all employees
         if(option2.equals("2")){processPayroll(scanner, false);}
+        //Payroll Staff: Exit program
         if(option2.equals("3")){System.exit(0);}
-        
         
         scanner.close();
     }
 
 //Methods
+    
+// Employee: Display employee details
 static void displayEmpDetails(Scanner scanner){
         String employeeDetails = "resources//EmployeeDetails.csv"; 
         String empNumber="";
         String lastName="";
         String firstName="";
         String birthday="";
-            
-        //Process payroll one employee: Display employee details
             
         String empNumInput="";
         while(true){
@@ -125,8 +128,9 @@ static void displayEmpDetails(Scanner scanner){
 }
 }   
 
+// Payroll staff: process payroll
 static void processPayroll(Scanner scanner, boolean oneEmpOnly){
-    
+        
         String employeeDetails = "resources//EmployeeDetails.csv";
         String attendance = "resources//AttendanceRecord.csv";
         
@@ -138,21 +142,28 @@ static void processPayroll(Scanner scanner, boolean oneEmpOnly){
         double hourlyRate=0;
             
         String empNumInput="";
+        
+        //counter for looping to all employees
         int empCounter = 10000;
         int empLast = 10034;
         
         while (true){
+        //for one employee
         if (oneEmpOnly){
         System.out.print("Enter Employee Number: ");
         empNumInput = scanner.nextLine();
         if (empNumInput.equals("exit"))System.exit(0);
         }
+        
+        // for all employees
         if (!oneEmpOnly){
         empCounter ++;
         String empString = String.valueOf(empCounter);
         empNumInput = empString;
             if (empCounter>empLast)return;
         }
+        
+        //Handling data from Employee Details File
         boolean found = false;
         try(BufferedReader br = new BufferedReader(new FileReader(employeeDetails))){
             br.readLine();
@@ -177,13 +188,12 @@ static void processPayroll(Scanner scanner, boolean oneEmpOnly){
             e.printStackTrace();}
         if (!found){
             System.out.println("Employee Number not found.");continue;}
-            
+        
         System.out.println("\nEmployee Number: "+empNumber);
         System.out.println("Name: "+lastName +", "+firstName);
         System.out.println("Birthday: "+birthday);      
         
-        
-            //Process payroll one employee: calculations
+        // looping for each month (June - December)
         for (int month=6;month <=12;month++){
             double hours1 =0;
             double hours2=0;
@@ -205,7 +215,6 @@ static void processPayroll(Scanner scanner, boolean oneEmpOnly){
                 br.readLine();
                 String line;
                 while ((line=br.readLine())!=null){
-                    
                     if(line.trim().isEmpty())continue;
                     String[] data = line.split(",");
                     if(!data[0].equals(empNumber))continue;
@@ -238,6 +247,7 @@ static void processPayroll(Scanner scanner, boolean oneEmpOnly){
             };
             
             grossSalary1 = computeGrossSalary(hours1,hourlyRate);
+            netSalary1 = grossSalary1;
             grossSalary2 = computeGrossSalary(hours2,hourlyRate);
             grossSalaryTotal = grossSalary1 + grossSalary2;
             sss = computeSSS(grossSalaryTotal);
@@ -248,11 +258,10 @@ static void processPayroll(Scanner scanner, boolean oneEmpOnly){
             tax = computeTax(taxableIncome);
             netSalary2 = grossSalary2 - deductionsTotal - tax;
             
-            System.out.println("\nHourly Rate: "+hourlyRate);
             System.out.println("\nCutoff Date: " +monthName + " 1 to 15");
             System.out.println("Total Hours Worked: " +hours1);
             System.out.println("Gross Salary: "+grossSalary1);
-            System.out.println("Net Salary: "+grossSalary1);
+            System.out.println("Net Salary: "+netSalary1);
             
             System.out.println("\nCutoff Date: " +monthName + " 16 to "+daysInMonth);
             System.out.println("Total Hours Worked: " +hours2);
@@ -265,10 +274,11 @@ static void processPayroll(Scanner scanner, boolean oneEmpOnly){
             System.out.println("Net Salary: "+netSalary2);
             
         }
-         //end of for loop
-        }//end of process one employee
+         //end of for-loop
+        }//end of payroll process 
 }
 
+//Helper method for computing hours worked
 static double computeHours(LocalTime login, LocalTime logout){
     LocalTime graceTime = LocalTime.of(8,10);
     LocalTime startTime = LocalTime.of(8,0);
@@ -282,7 +292,7 @@ static double computeHours(LocalTime login, LocalTime logout){
     }
     long minutesWorked = Duration.between(login, logout).toMinutes();
     if (minutesWorked > 60){
-        minutesWorked -=60;
+        minutesWorked -=60; //1 hour lunch break
     }else{
         minutesWorked = 0;
     }
@@ -291,10 +301,12 @@ static double computeHours(LocalTime login, LocalTime logout){
     return Math.min(hours, 8.0);
 }  
 
+//Helper method for computing gross salary
 static double computeGrossSalary(double hours, double hourlyRate){
     return hours*hourlyRate;
 }
 
+//Helper method for computing SSS contribution
 static double computeSSS(double grossSalaryTotal){
     String sssTable = "resources//SSSContribution.csv";
     double min =0;
@@ -324,10 +336,12 @@ static double computeSSS(double grossSalaryTotal){
     return contribution;
 }
 
+//Helper method for computing PhilHealth contribution
 static double computePhilHealth (double grossSalaryTotal, double premium){
     return grossSalaryTotal*(premium/2);
 }
 
+//Helper method for computing Pag-IBIG contribution
 static double computePagIBIG (double grossSalaryTotal){
     double contribution = 0;
     if (grossSalaryTotal<1000.0)return 0;
@@ -340,6 +354,8 @@ static double computePagIBIG (double grossSalaryTotal){
     
     return contribution;
 }
+
+//Helper method for computing tax
 static double computeTax(double taxableIncome){
     double contribution=0;
     if (taxableIncome<20833)return 0;
@@ -358,6 +374,7 @@ static double computeTax(double taxableIncome){
     if (taxableIncome>=666667 ){
         contribution = 200833.33 + ((taxableIncome - 666667)*0.35);
     }
+    
     return contribution;
 }
 }
