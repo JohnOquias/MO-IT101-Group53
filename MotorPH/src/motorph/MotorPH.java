@@ -28,7 +28,6 @@ public class MotorPH {
             if (password.equals("12345")){break;}
             else{System.out.println("Incorrect Password");}  
         }  
-        //end of login
        
         String option ="";
         while (true){
@@ -274,8 +273,8 @@ static void processPayroll(Scanner scanner, boolean oneEmpOnly){
             System.out.println("Net Salary: "+netSalary2);
             
         }
-         //end of for-loop
-        }//end of payroll process 
+         
+        }
 }
 
 //Helper method for computing hours worked
@@ -378,3 +377,4 @@ static double computeTax(double taxableIncome){
     return contribution;
 }
 }
+
