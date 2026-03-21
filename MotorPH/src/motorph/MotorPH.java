@@ -11,6 +11,8 @@ import java.util.ArrayList;
 public class MotorPH {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        
+        //login
         System.out.print("Enter Username: ");
         String username = scanner.nextLine();//username input
         System.out.print("Enter Password: ");
