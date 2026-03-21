@@ -240,11 +240,11 @@ public class MotorPH {
             br.readLine();
             String line;
             while ((line=br.readLine())!=null){
-                String[] sssData = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");//split by comma, ignore commas inside double-quoted text
-                for (int i = 0; i < sssData.length; i++) {
-                    sssData[i] = sssData[i].replaceAll("^\"|\"$", "").trim().replace(",", ""); //clean each column by removing surrounding quotes and extra spaces
+                String[] sssRow = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");//split by comma, ignore commas inside double-quoted text
+                for (int i = 0; i < sssRow.length; i++) {
+                    sssRow[i] = sssRow[i].replaceAll("^\"|\"$", "").trim().replace(",", ""); //clean each column by removing surrounding quotes and extra spaces
                 }  
-                sssTable.add(sssData);
+                sssTable.add(sssRow);
             } 
         }catch (FileNotFoundException e) {
             System.err.println("Failed to load SSS Table. File not found at " + sssTableFilePath);
@@ -322,11 +322,11 @@ public class MotorPH {
         double contribution = 0;
         if (grossSalaryTotal<3250.0)return 135.00;
         if (grossSalaryTotal>=24750.0)return 1125.00;
-        for (String[] sssData: sssTable){
-            double min = Double.parseDouble(sssData[0]);
-            double max = Double.parseDouble(sssData[2]);
+        for (String[] sssRow: sssTable){
+            double min = Double.parseDouble(sssRow[0]);
+            double max = Double.parseDouble(sssRow[2]);
             if (grossSalaryTotal >= min && grossSalaryTotal <=max){
-                contribution = Double.parseDouble(sssData[3]);
+                contribution = Double.parseDouble(sssRow[3]);
                 break;
             }
         }
