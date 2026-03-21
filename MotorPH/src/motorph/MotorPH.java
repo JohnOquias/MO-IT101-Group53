@@ -158,7 +158,7 @@ public class MotorPH {
             double taxableIncome = grossSalaryTotal - deductionsSubTotal;
             double tax = computeTax(taxableIncome);
             double deductionsTotal = deductionsSubTotal + tax;
-            double netSalary2 = grossSalary2 - deductionsSubTotal - tax;
+            double netSalary2 = grossSalary2 - deductionsTotal;
             String monthName = getMonthName(month);//converts the number of the month to the name of the month
             int daysInMonth=YearMonth.of(2024, month).lengthOfMonth();//fetches the number of days for the given month and year
             
