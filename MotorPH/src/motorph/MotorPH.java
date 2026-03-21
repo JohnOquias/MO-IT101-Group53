@@ -154,10 +154,11 @@ public class MotorPH {
             double sss = computeSSS(grossSalaryTotal, sssTable);
             double philHealth = computePhilHealth(grossSalaryTotal);
             double pagIBIG = computePagIBIG(grossSalaryTotal);
-            double deductionsTotal = sss + philHealth + pagIBIG;
-            double taxableIncome = grossSalaryTotal - deductionsTotal;
+            double deductionsSubTotal = sss + philHealth + pagIBIG;
+            double taxableIncome = grossSalaryTotal - deductionsSubTotal;
             double tax = computeTax(taxableIncome);
-            double netSalary2 = grossSalary2 - deductionsTotal - tax;
+            double deductionsTotal = deductionsSubTotal + tax;
+            double netSalary2 = grossSalary2 - deductionsSubTotal - tax;
             String monthName = getMonthName(month);//converts the number of the month to the name of the month
             int daysInMonth=YearMonth.of(2024, month).lengthOfMonth();//fetches the number of days for the given month and year
             
@@ -176,6 +177,7 @@ public class MotorPH {
             System.out.println("    PhilHealth: "+philHealth);
             System.out.println("    Pag-IBIG: " + pagIBIG);
             System.out.println("    Tax: "+tax);
+            System.out.println("Total Deductions: " + deductionsTotal);
             System.out.println("Net Salary: "+netSalary2);
             System.out.println("-".repeat(100));
 
