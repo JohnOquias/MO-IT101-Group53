@@ -55,8 +55,10 @@ public class MotorPH {
             System.out.print("Enter Employee Number: ");
             String empNumber = scanner.nextLine();//employee: employee number input
             displayEmpDetails(empNumber, empDetailsTable);//call method for displaying employee details 
-        }else if (employeeOption.equals("2"))return;
-        else{System.out.println("Invalid option");
+        }else if (employeeOption.equals("2")){
+            return;
+        }else{
+            System.out.println("Invalid option");
         }
     }
     
@@ -83,12 +85,15 @@ public class MotorPH {
                     processPayroll(empNumber, empDetailsTable, attendanceTable, sssTable);
                 }    
                 System.out.println("-".repeat(100));
+            }else if(payrollStaffOption2.equals("3")){
+                return;
+            }else {
+                System.out.println("Invalid option");
             }
-            else if(payrollStaffOption2.equals("3")){return;}
-            else {System.out.println("Invalid option");
-            }
-        }else if (payrollStaffOption1.equals("2"))return;
-        else{System.out.println("Invalid option");
+        }else if (payrollStaffOption1.equals("2")){
+            return;
+        }else{
+            System.out.println("Invalid option");
         }
     }
     
@@ -104,7 +109,8 @@ public class MotorPH {
             System.out.println("-".repeat(100));
             found = true;
             break;
-        }if (!found){System.out.println("Employee Number does not exist.");
+        }if (!found){
+            System.out.println("Employee Number does not exist.");
         }
     }
     
@@ -131,7 +137,9 @@ public class MotorPH {
                 System.err.println("Number Format Error: Invalid hourly rate number format for Employee " + empDetailsRow[0]);
                 return;
             }break;
-        }if (!found){System.out.println("Employee Number does not exist.");return;
+        }if (!found){
+            System.out.println("Employee Number does not exist.");
+            return;
         }
         
         //display employee details
@@ -280,12 +288,15 @@ public class MotorPH {
             int recordMonth = Integer.parseInt(dateParts[0]);
             int day = Integer.parseInt(dateParts[1]);
             int year = Integer.parseInt(dateParts[2]);
-            if(year != 2024 || recordMonth != month) continue;
+            if(year != 2024 || recordMonth != month)continue;
             LocalTime login = LocalTime.parse(attendanceRow[4].trim(), timeFormat);
             LocalTime logout = LocalTime.parse(attendanceRow[5].trim(), timeFormat);
             double hours = computeHours(login, logout);
-            if (day<=15) hours1 += hours;
-            else hours2 += hours;
+            if (day<=15) {
+                hours1 += hours;
+            }else {
+                hours2 += hours;
+            }
         }double[] monthlyHours = {hours1,hours2};
         return monthlyHours;
     }
@@ -341,19 +352,22 @@ public class MotorPH {
 
     static double computePagIBIG (double grossSalaryTotal){
         double contribution = 0;
-        if (grossSalaryTotal<1000.0)return 0;
-        if (grossSalaryTotal>=1000.0&&grossSalaryTotal<=1500.0){
-            contribution = grossSalaryTotal*0.01;}
-        else if (grossSalaryTotal > 1500.0){
-            contribution = grossSalaryTotal*0.02;}
+        if (grossSalaryTotal<1000.0){
+            return 0;
+        }else if (grossSalaryTotal>=1000.0&&grossSalaryTotal<=1500.0){
+            contribution = grossSalaryTotal*0.01;
+        }else if (grossSalaryTotal > 1500.0){
+            contribution = grossSalaryTotal*0.02;
+        }
         if (contribution > 100)return 100.0; //maximum contribution is 100
         return contribution;
     }
 
     static double computeTax(double taxableIncome){
         double contribution=0;
-        if (taxableIncome<20833)return 0;
-        else if (taxableIncome>=20833 && taxableIncome<33333){
+        if (taxableIncome<20833){
+            return 0;
+        }else if (taxableIncome>=20833 && taxableIncome<33333){
             contribution = (taxableIncome - 20833)*0.20;
         }else if (taxableIncome>=33333 && taxableIncome<66667){
             contribution = 2500 + ((taxableIncome - 33333)*0.25);
