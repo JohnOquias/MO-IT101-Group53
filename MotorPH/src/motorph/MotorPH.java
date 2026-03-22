@@ -97,13 +97,13 @@ public class MotorPH {
         boolean found = false;
         for (String[] empDetailsRow: empDetailsTable){
             if (!empNumber.equals(empDetailsRow[0]))continue;
-                System.out.println("-".repeat(100));
-                System.out.println("Employee Number: "+empDetailsRow[0]);
-                System.out.println("Name: "+ empDetailsRow[1] + "," + empDetailsRow[2]);
-                System.out.println("Birthday: "+empDetailsRow[3]);
-                System.out.println("-".repeat(100));
-                found = true;
-                break;
+            System.out.println("-".repeat(100));
+            System.out.println("Employee Number: "+empDetailsRow[0]);
+            System.out.println("Name: "+ empDetailsRow[1] + "," + empDetailsRow[2]);
+            System.out.println("Birthday: "+empDetailsRow[3]);
+            System.out.println("-".repeat(100));
+            found = true;
+            break;
         }if (!found){System.out.println("Employee Number does not exist.");
         }
     }
@@ -127,11 +127,10 @@ public class MotorPH {
             birthday = empDetailsRow[3];
             try{    
                 hourlyRate = Double.parseDouble(empDetailsRow[18]);
-            }catch (NumberFormatException e) {//If there is a number format error for hourly rate, display error message, close method
+            }catch (NumberFormatException e){ 
                 System.err.println("Number Format Error: Invalid hourly rate number format for Employee " + empDetailsRow[0]);
                 return;
-            }   
-                break;
+            }break;
         }if (!found){System.out.println("Employee Number does not exist.");return;
         }
         
@@ -285,8 +284,8 @@ public class MotorPH {
             LocalTime login = LocalTime.parse(attendanceRow[4].trim(), timeFormat);
             LocalTime logout = LocalTime.parse(attendanceRow[5].trim(), timeFormat);
             double hours = computeHours(login, logout);
-            if (day<=15) {hours1 += hours;
-            }else hours2 += hours;
+            if (day<=15) hours1 += hours;
+            else hours2 += hours;
         }double[] monthlyHours = {hours1,hours2};
         return monthlyHours;
     }
